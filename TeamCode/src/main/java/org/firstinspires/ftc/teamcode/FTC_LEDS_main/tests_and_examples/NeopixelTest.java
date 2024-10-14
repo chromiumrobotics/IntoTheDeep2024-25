@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.FTC_LEDS_main.tests_and_examples;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -7,7 +8,7 @@ import org.firstinspires.ftc.teamcode.FTC_LEDS_main.AdafruitNeodriver;
 
 
 @TeleOp
-//@Disabled
+@Disabled
 public class NeopixelTest extends LinearOpMode {
 
     AdafruitNeodriver neo;
