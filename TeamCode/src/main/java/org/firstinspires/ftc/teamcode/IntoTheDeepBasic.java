@@ -1,110 +1,115 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-public class IntoTheDeepBasic {
-    @TeleOp(name = "BasicOpMode", group = "Linear OpMode")
-    public class IntoTheDeepBasic_Linear extends LinearOpMode {
+@TeleOp(name = "BasicOpMode", group = "LinearOpMode")
+public class IntoTheDeepBasic extends LinearOpMode {
 
-        private ElapsedTime runtime = new ElapsedTime();
-        private DcMotor leftFrontDrive = null;
-        private DcMotor leftBackDrive = null;
-        private DcMotor rightFrontDrive = null;
-        private DcMotor rightBackDrive = null;
-        private DcMotor slideExtender = null;
-        private Servo intakeRotator = null;
-        private Servo intakeSpinner = null;
-        private Servo armRotator = null;
+    private ElapsedTime runtime = new ElapsedTime();
+    private DcMotor leftFrontDrive = null;
+    private DcMotor leftBackDrive = null;
+    private DcMotor rightFrontDrive = null;
+    private DcMotor rightBackDrive = null;
+    private DcMotor slideExtender = null;
+    //private Servo intakeRotator = null;
+    private CRServo intakeSpinner = null;
+    private Servo armRotator = null;
 
-        @Override
-        public void runOpMode() {
-            leftFrontDrive = hardwareMap.get(DcMotor.class, "left_front_drive");
-            leftBackDrive = hardwareMap.get(DcMotor.class, "left_back_drive");
-            rightFrontDrive = hardwareMap.get(DcMotor.class, "right_front_drive");
-            rightBackDrive = hardwareMap.get(DcMotor.class, "right_back_drive");
-            slideExtender = hardwareMap.get(DcMotor.class, "slide_extender");
-            intakeRotator = hardwareMap.get(Servo.class, "intake_rotator");
-            intakeSpinner = hardwareMap.get(Servo.class, "intake_spinner");
-            armRotator = hardwareMap.get(Servo.class, "arm_rotator");
 
-            leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
-            leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
-            rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
-            rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
+    @Override
+    public void runOpMode() {
+        leftFrontDrive = hardwareMap.get(DcMotor.class, "leftFrontDrive");
+        leftBackDrive = hardwareMap.get(DcMotor.class, "leftBackDrive");
+        rightFrontDrive = hardwareMap.get(DcMotor.class, "rightFrontDrive");
+        rightBackDrive = hardwareMap.get(DcMotor.class, "rightBackDrive");
+        intakeSpinner = hardwareMap.get(CRServo.class, "slideExtender");
+        //intakeRotator = hardwareMap.get(Servo.class, "intakeRotator");
+        intakeSpinner = hardwareMap.get(CRServo.class, "intakeSpinner");
+        armRotator = hardwareMap.get(Servo.class, "armRotator");
 
-            telemetry.addData("Status", "Initialized");
-            telemetry.update();
+        leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
+        leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
+        rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
+        rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
 
-            waitForStart();
-            runtime.reset();
+        slideExtender.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-            while (opModeIsActive()) {
-                double max;
+        telemetry.addData("Status", "Initialized");
+        telemetry.update();
 
-                double axial = -gamepad1.left_stick_y;
-                double lateral = gamepad1.left_stick_x;
-                double yaw = gamepad1.right_stick_x;
-                intakeRotator.setPosition(0);
-                double leftFrontPower = axial + lateral + yaw;
-                double rightFrontPower = axial - lateral - yaw;
-                double leftBackPower = axial - lateral + yaw;
-                double rightBackPower = axial + lateral - yaw;
-                double rotation = 0;
-                max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
-                max = Math.max(max, Math.abs(leftBackPower));
-                max = Math.max(max, Math.abs(rightBackPower));
+        waitForStart();
+        runtime.reset();
 
-                if (max > 1.0) {
-                    leftFrontPower /= max;
-                    rightFrontPower /= max;
-                    leftBackPower /= max;
-                    rightBackPower /= max;
+        while (opModeIsActive() && !isStopRequested()) {
+            double max;
 
-                }
-                leftFrontDrive.setPower(leftFrontPower);
-                rightFrontDrive.setPower(rightFrontPower);
-                leftBackDrive.setPower(leftBackPower);
-                rightBackDrive.setPower(rightBackPower);
+            double axial = -gamepad1.left_stick_y;
+            double lateral = gamepad1.left_stick_x;
+            double yaw = gamepad1.right_stick_x;
+            //intakeRotator.setPosition(0);
+            double leftFrontPower = axial + lateral + yaw;
+            double rightFrontPower = axial - lateral - yaw;
+            double leftBackPower = axial - lateral + yaw;
+            double rightBackPower = axial + lateral - yaw;
+            max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
+            max = Math.max(max, Math.abs(leftBackPower));
+            max = Math.max(max, Math.abs(rightBackPower));
 
-                if (gamepad1.y) {
-                    while (runtime.seconds() < 2 && !isStopRequested()){
-                        slideExtender.setPower(0.5);
-                    }
-                }
-                if (gamepad1.x) {
-                while (runtime.seconds() < 2 && !isStopRequested()){
-                        slideExtender.setPower(-0.5);
-                    }
-                }
-                if (gamepad1.right_bumper) {
-                    intakeRotator.setDirection(Servo.Direction.FORWARD);
-                    intakeRotator.setPosition(0.25);
-                }
-                if (gamepad1.left_bumper) {
-                    intakeRotator.setDirection(Servo.Direction.REVERSE);
-                    intakeRotator.setPosition(0);
-                }
-
-                while (gamepad1.right_trigger > 0){
-                    if (rotation == 1){
-                        rotation -= 1;
-                    }
-                    else {
-                        intakeSpinner.setPosition(rotation += 0.1);
-                    }
-                }
-                telemetry.addData("Status", "Run Time: " + runtime.toString());
-                telemetry.addData("Front left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
-                telemetry.addData("Back  left/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
-                telemetry.update();
-
+            if (max > 1.0) {
+                leftFrontPower /= max;
+                rightFrontPower /= max;
+                leftBackPower /= max;
+                rightBackPower /= max;
 
             }
+            leftFrontDrive.setPower(leftFrontPower);
+            rightFrontDrive.setPower(rightFrontPower);
+            leftBackDrive.setPower(leftBackPower);
+            rightBackDrive.setPower(rightBackPower);
+
+            if (gamepad1.y) {
+                slideExtender.setPower(0.5);
+            }
+            else if (gamepad1.x) {
+                slideExtender.setPower(-0.5);
+            }
+            else {
+                slideExtender.setPower(0.0);
+            }
+
+            //if (gamepad1.right_bumper) {
+                //intakeRotator.setPosition(0.25);
+            //}
+            //if (gamepad1.left_bumper) {
+                //intakeRotator.setPosition(0);
+            //}
+
+            if (gamepad1.right_trigger > 0){
+                intakeSpinner.setPower(1.0);
+            }
+            else{
+                intakeSpinner.setPower(0.0);
+            }
+            if (gamepad1.a){
+                armRotator.setPosition(0.5);
+            }
+            if (gamepad1.b){
+                armRotator.setPosition(0.0);
+            }
+            telemetry.addData("Status", "Run Time: " + runtime.toString());
+            telemetry.addData("Front left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
+            telemetry.addData("Back  left/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
+            telemetry.addData("intake spinner power", intakeSpinner.getPower());
+            //telemetry.addData("intake rotator position", intakeRotator.getPosition());
+            telemetry.addData("arm rotator position", armRotator.getPosition());
+            telemetry.update();
+
+
         }
     }
 }
