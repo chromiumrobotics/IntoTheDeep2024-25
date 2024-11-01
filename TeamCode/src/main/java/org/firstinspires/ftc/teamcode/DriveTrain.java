@@ -32,7 +32,6 @@ public class DriveTrain {
         double axial = -gamepad.left_stick_y;
         double lateral = gamepad.left_stick_x;
         double yaw = gamepad.right_stick_x;
-        //intakeRotator.setPosition(0);
         double leftFrontPower = axial + lateral + yaw;
         double rightFrontPower = axial - lateral - yaw;
         double leftBackPower = axial - lateral + yaw;
