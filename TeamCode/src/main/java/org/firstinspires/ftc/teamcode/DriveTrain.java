@@ -13,7 +13,7 @@ public class DriveTrain {
     private DcMotor rightFrontDrive;
     private DcMotor rightBackDrive;
 
-    public DriveTrain(HardwareMap hwmp){
+    public DriveTrain(HardwareMap hwmp) {
 
         this.leftFrontDrive = hwmp.get(DcMotor.class, "leftFrontDrive");
         this.leftBackDrive = hwmp.get(DcMotor.class, "leftBackDrive");
@@ -26,17 +26,13 @@ public class DriveTrain {
         rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
     }
 
-    public void drive(Gamepad gamepad){
+    public void drive(double x, double y, double r) {
         double max;
 
-        double axial = -gamepad.left_stick_y;
-        double lateral = gamepad.left_stick_x;
-        double yaw = gamepad.right_stick_x;
-        //intakeRotator.setPosition(0);
-        double leftFrontPower = axial + lateral + yaw;
-        double rightFrontPower = axial - lateral - yaw;
-        double leftBackPower = axial - lateral + yaw;
-        double rightBackPower = axial + lateral - yaw;
+        double leftFrontPower = y + x + r;
+        double rightFrontPower = y - x - r;
+        double leftBackPower = y - x + r;
+        double rightBackPower = y + x - r;
         max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
         max = Math.max(max, Math.abs(leftBackPower));
         max = Math.max(max, Math.abs(rightBackPower));
@@ -48,13 +44,16 @@ public class DriveTrain {
             rightBackPower /= max;
 
         }
+
         leftFrontDrive.setPower(leftFrontPower);
         rightFrontDrive.setPower(rightFrontPower);
         leftBackDrive.setPower(leftBackPower);
         rightBackDrive.setPower(rightBackPower);
+
+
     }
 
-    public void doTelemetry(Telemetry telemetry){
+    public void doTelemetry(Telemetry telemetry) {
         telemetry.addData("Front left/Right", "%4.2f, %4.2f", leftFrontDrive.getPower(), rightFrontDrive.getPower());
         telemetry.addData("Back  left/Right", "%4.2f, %4.2f", leftBackDrive.getPower(), rightBackDrive.getPower());
     }

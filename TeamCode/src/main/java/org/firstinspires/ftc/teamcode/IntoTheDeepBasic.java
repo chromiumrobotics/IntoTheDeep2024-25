@@ -2,35 +2,31 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.teamcode.FTC_LEDS_main.gamepadExpansions.AnalogExpanded;
+import org.firstinspires.ftc.teamcode.FTC_LEDS_main.gamepadExpansions.AxisExpanded;
+import org.firstinspires.ftc.teamcode.FTC_LEDS_main.gamepadExpansions.GamepadExpanded;
+import org.firstinspires.ftc.teamcode.robocode.Arm;
+import org.firstinspires.ftc.teamcode.robocode.Slides;
 
 @TeleOp(name = "BasicOpMode", group = "LinearOpMode")
 public class IntoTheDeepBasic extends LinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor slideExtender = null;
-    //private Servo intakeRotator = null;
-    private CRServo intakeSpinner = null;
-    private Servo armRotator = null;
+    private Slides slides;
+    private Arm arm;
     private DriveTrain driveTrain;
+    GamepadExpanded gpex1 = new GamepadExpanded(gamepad1);
 
     @Override
     public void runOpMode() {
+        gpex1.left_stick_axis.setFilter(AnalogExpanded.MODE.INSENSITIVE);
+        gpex1.right_stick_axis.setFilter(AnalogExpanded.MODE.INSENSITIVE);
+
         driveTrain = new DriveTrain(hardwareMap);
-        slideExtender = hardwareMap.get(DcMotor.class, "slideExtender");
-        //intakeRotator = hardwareMap.get(Servo.class, "intakeRotator");
-        intakeSpinner = hardwareMap.get(CRServo.class, "intakeSpinner");
-        armRotator = hardwareMap.get(Servo.class, "armRotator");
-
-        double armPos = 0.28;
-
-        slideExtender.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        slideExtender.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        slides = new Slides(hardwareMap);
+        arm = new Arm(hardwareMap);
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -39,50 +35,20 @@ public class IntoTheDeepBasic extends LinearOpMode {
         runtime.reset();
 
         while (opModeIsActive() && !isStopRequested()) {
+            gpex1.update(gamepad1);
 
-            driveTrain.drive(gamepad1);
+            driveTrain.drive(gpex1.left_stick_axis.x, -gpex1.left_stick_axis.y, gpex1.right_stick_axis.x);
 
-            if (gamepad1.y) {
-                slideExtender.setPower(1);
-            } else if (gamepad1.x) {
-                slideExtender.setPower(-0.1);
-            } else if (gamepad1.dpad_up) {
-                slideExtender.setPower(-1);
-            } else {
-                slideExtender.setPower(0.1);
-            }
+            slides.move(gamepad2);
 
-            /*if (gamepad1.right_bumper) {
-                for (int i = 100; i >= 0; i--) {
-                    intakeRotator.setPosition((double) i / 100);
-                }*/
+            arm.rotate(gamepad2);
 
+            arm.spin(gamepad2);
 
-                if (gamepad1.right_trigger > 0) {
-                    intakeSpinner.setPower(1.0);
-                } else if (gamepad1.left_trigger > 0) {
-                    intakeSpinner.setPower(-0.5);
-                } else {
-                    intakeSpinner.setPower(0.0);
-                }
-                if (gamepad1.a) {
-                    armPos = .28;
-                }
-                if (gamepad1.b) {
-                    armPos = .5;
-                }
-                if (gamepad1.dpad_down) {
-                    armPos = .7;
-                }
-
-                armRotator.setPosition(armPos);
-
-                telemetry.addData("Status", "Run Time: " + runtime.toString());
-                driveTrain.doTelemetry(telemetry);
-                telemetry.addData("intake spinner power", intakeSpinner.getPower());
-                //telemetry.addData("intake rotator position", intakeRotator.getPosition());
-                telemetry.addData("arm rotator position", armRotator.getPosition());
-                telemetry.update();
+            telemetry.addData("Status", "Run Time: " + runtime.toString());
+            driveTrain.doTelemetry(telemetry);
+            arm.doTelemetry(telemetry);
+            telemetry.update();
 
 
             }

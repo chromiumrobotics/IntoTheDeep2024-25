@@ -8,31 +8,31 @@ public class GamepadExpanded {
 
     Gamepad gp;
 
-    public ButtonExpanded a;
-    public ButtonExpanded b;
-    public ButtonExpanded x;
-    public ButtonExpanded y;
-    public ButtonExpanded right_bumper;
-    public ButtonExpanded left_bumper;
-    public ButtonExpanded left_stick_button;
-    public ButtonExpanded right_stick_button;
-    public ButtonExpanded dpad_up;
-    public ButtonExpanded dpad_left;
-    public ButtonExpanded dpad_down;
-    public ButtonExpanded dpad_right;
-    public ButtonExpanded start;
-    public ButtonExpanded back;
-    public ButtonExpanded guide;
-    public ButtonExpanded left_trigger_digital;
-    public ButtonExpanded right_trigger_digital;
+    public ButtonExpanded a = new ButtonExpanded();
+    public ButtonExpanded b = new ButtonExpanded();
+    public ButtonExpanded x = new ButtonExpanded();
+    public ButtonExpanded y = new ButtonExpanded();
+    public ButtonExpanded right_bumper = new ButtonExpanded();
+    public ButtonExpanded left_bumper = new ButtonExpanded();
+    public ButtonExpanded left_stick_button = new ButtonExpanded();
+    public ButtonExpanded right_stick_button = new ButtonExpanded();
+    public ButtonExpanded dpad_up = new ButtonExpanded();
+    public ButtonExpanded dpad_left = new ButtonExpanded();
+    public ButtonExpanded dpad_down = new ButtonExpanded();
+    public ButtonExpanded dpad_right = new ButtonExpanded();
+    public ButtonExpanded start = new ButtonExpanded();
+    public ButtonExpanded back = new ButtonExpanded();
+    public ButtonExpanded guide = new ButtonExpanded();
+    public ButtonExpanded left_trigger_digital = new ButtonExpanded();
+    public ButtonExpanded right_trigger_digital = new ButtonExpanded();
 
-    public AnalogExpanded left_trigger_analog;
-    public AnalogExpanded right_trigger_analog;
+    public AnalogExpanded left_trigger_analog = new AnalogExpanded();
+    public AnalogExpanded right_trigger_analog = new AnalogExpanded();
 
-    public AxisExpanded right_stick_axis;
-    public AxisExpanded left_stick_axis;
+    public AxisExpanded right_stick_axis = new AxisExpanded();
+    public AxisExpanded left_stick_axis = new AxisExpanded();
 
-    public ArrayList<ButtonExpanded> buttons;
+    public ArrayList<ButtonExpanded> buttons = new ArrayList<>();
 
 
     /**
@@ -86,17 +86,10 @@ public class GamepadExpanded {
         this.buttons.add(start);
         this.buttons.add(back);
         this.buttons.add(guide);
-    }
 
 
-    public void update(){
-        if (this.gp != null){
-            update(this.gp);
-        } else {
-            throw new RuntimeException("Gamepad object gp not found on " +
-                    this + "\nDid you initialize it or call it in the update method?");
-        }
     }
+
 
     public void update(Gamepad gp){
         if (this.gp == null) {

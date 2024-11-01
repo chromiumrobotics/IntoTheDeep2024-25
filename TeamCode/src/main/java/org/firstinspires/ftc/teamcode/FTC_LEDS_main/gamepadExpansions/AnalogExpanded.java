@@ -1,10 +1,10 @@
 package org.firstinspires.ftc.teamcode.FTC_LEDS_main.gamepadExpansions;
 
 public class AnalogExpanded {
-    private float value;
+    private float value = 0.0f;
 
     private MODE mode = MODE.NORMAL;
-    private double factor = 3.14;
+    private double factor = 2.7183;
 
     public enum MODE{
         NORMAL,
