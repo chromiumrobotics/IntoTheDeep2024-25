@@ -26,9 +26,11 @@ public class DriveTrain {
         rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
     }
 
-    public void drive(double x, double y, double r) {
+    public void drive(Gamepad gamepad) {
         double max;
-
+        double x = gamepad.left_stick_x;
+        double y = -gamepad.left_stick_y;
+        double r = gamepad.right_stick_x;
         double leftFrontPower = y + x + r;
         double rightFrontPower = y - x - r;
         double leftBackPower = y - x + r;
@@ -44,11 +46,16 @@ public class DriveTrain {
             rightBackPower /= max;
 
         }
+        double scalar = .6;
 
-        leftFrontDrive.setPower(leftFrontPower);
-        rightFrontDrive.setPower(rightFrontPower);
-        leftBackDrive.setPower(leftBackPower);
-        rightBackDrive.setPower(rightBackPower);
+        if (gamepad.right_trigger > 0) {
+            scalar = 1.0;
+        }
+
+        leftFrontDrive.setPower(scalar * leftFrontPower);
+        rightFrontDrive.setPower(scalar * rightFrontPower);
+        leftBackDrive.setPower(scalar * leftBackPower);
+        rightBackDrive.setPower(scalar * rightBackPower);
 
 
     }

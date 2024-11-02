@@ -17,12 +17,12 @@ public class IntoTheDeepBasic extends LinearOpMode {
     private Slides slides;
     private Arm arm;
     private DriveTrain driveTrain;
-    GamepadExpanded gpex1 = new GamepadExpanded(gamepad1);
+    //GamepadExpanded gpex1 = new GamepadExpanded(gamepad1);
 
     @Override
     public void runOpMode() {
-        gpex1.left_stick_axis.setFilter(AnalogExpanded.MODE.INSENSITIVE);
-        gpex1.right_stick_axis.setFilter(AnalogExpanded.MODE.INSENSITIVE);
+        //gpex1.left_stick_axis.setFilter(AnalogExpanded.MODE.INSENSITIVE);
+        //gpex1.right_stick_axis.setFilter(AnalogExpanded.MODE.INSENSITIVE);
 
         driveTrain = new DriveTrain(hardwareMap);
         slides = new Slides(hardwareMap);
@@ -35,11 +35,14 @@ public class IntoTheDeepBasic extends LinearOpMode {
         runtime.reset();
 
         while (opModeIsActive() && !isStopRequested()) {
-            gpex1.update(gamepad1);
+            //gpex1.update(gamepad1);
 
-            driveTrain.drive(gpex1.left_stick_axis.x, -gpex1.left_stick_axis.y, gpex1.right_stick_axis.x);
+            //driveTrain.drive(gpex1.left_stick_axis.x, -gpex1.left_stick_axis.y, gpex1.right_stick_axis.x);
+            driveTrain.drive(gamepad1);
 
             slides.move(gamepad2);
+
+            slides.hang(gamepad1);
 
             arm.rotate(gamepad2);
 

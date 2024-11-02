@@ -11,7 +11,7 @@ public class Arm {
 
     private Servo armRotator = null;
     private CRServo intakeSpinner;
-    double armPos = 0.3;
+    double armPos = 0.2;
 
     public Arm(HardwareMap hwmp){
 
@@ -23,10 +23,10 @@ public class Arm {
     public void rotate(Gamepad gamepad){
 
         if (gamepad.y) {
-            armPos = .28;
+            armPos = .2;
         }
         if (gamepad.b) {
-            armPos = .5;
+            armPos = .45;
         }
         if (gamepad.a) {
             armPos = .7;
