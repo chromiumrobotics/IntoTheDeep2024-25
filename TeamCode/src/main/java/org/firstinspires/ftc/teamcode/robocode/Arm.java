@@ -26,10 +26,10 @@ public class Arm {
             armPos = .2;
         }
         if (gamepad.b) {
-            armPos = .45;
+            armPos = .42;
         }
         if (gamepad.a) {
-            armPos = .7;
+            armPos = .67;
         }
         armRotator.setPosition(armPos);
 
